@@ -10,7 +10,7 @@ function merge(left, right) {
   return [...arr, ...left, ...right];
 }
 
-function mergeSort(array) {
+export function mergeSort(array) {
   let leftSide = [];
   let rightSide = [];
   const half = array.length / 2;
@@ -22,5 +22,3 @@ function mergeSort(array) {
   rightSide = mergeSort(array);
   return merge(leftSide, rightSide);
 }
-
-module.exports = mergeSort;

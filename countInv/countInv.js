@@ -1,6 +1,6 @@
-const mergeSort = require("../mergeSort/mergeSort");
+import { mergeSort } from '../mergeSort/mergeSort';
 
-function countInv(array) {
+export function countInv(array) {
   let leftInv = 0;
   let rightInv = 0;
   let splitInv = 0;
@@ -34,17 +34,3 @@ function countSplitInv(firstHalf, secondHalf) {
   }
   return count;
 }
-
-// *Evaluate
-console.log(
-  `Reverse sorted array inversions: ${countInv([8, 7, 6, 5, 4, 3, 2, 1])}`
-);
-console.log(`Sorted array inversions: ${countInv([1, 2, 3, 4, 5, 6, 7, 8])}`);
-
-console.log(
-  `Test case: ${countInv([
-    54044, 14108, 79294, 29649, 25260, 60660, 2995, 53777, 49689, 9083,
-  ])}`
-);
-
-module.exports = countInv;

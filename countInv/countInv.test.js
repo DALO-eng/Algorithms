@@ -1,4 +1,5 @@
-const countInv = require("./countInv");
+import { countInv } from './countInv';
+
 
 test("Sorted array inversions", () => {
   expect(countInv([1, 2, 3, 4, 5, 6, 7, 8])).toBe(0);
