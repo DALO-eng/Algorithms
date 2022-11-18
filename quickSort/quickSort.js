@@ -68,6 +68,6 @@ let countComparisons = 0;
 for (let i = 0; i < 10000; i++) {
   var count = 0;
   var items = [2148, 9058, 7742, 3153, 6324, 609, 7628, 5469, 7017, 504];
-  countComparisons += quickSort(items, "3median").comparisons;
+  countComparisons += quickSort(items, "first").comparisons;
 }
 console.log(`Comparisons: ${countComparisons / 10000}`);
