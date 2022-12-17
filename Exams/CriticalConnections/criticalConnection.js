@@ -1,16 +1,15 @@
 const vertices = [0, 1, 2, 3, 4, 5, 6];
 const edges = [
-  [0, 1],
-  [0, 2],
+  [1, 0],
   [1, 2],
-  [2, 3],
+  [2, 0],
+  [1, 3],
+  [1, 4],
+  [1, 6],
   [3, 5],
-  [3, 4],
   [4, 5],
-  [4, 6],
 ];
 
-// * O(V + E)
 const createAdjacencyList = (vertices, edges) => {
   const adjacencyList = new Map();
   vertices.forEach((vertex) => adjacencyList.set(vertex, []));
@@ -38,13 +37,12 @@ const bfs = (adjaList, s) => {
   return visited;
 };
 
-// * O(3E^2 + 2EV)
 const criticalConnections = (vertex, edges) => {
   let newEdges, adjaList, first;
   let criticalEdges = [];
   // * O(E)
   for (let i of edges) {
-    newEdges = edges.filter((edge) => edge !== i); // * O(E)
+    newEdges = edges.filter((edge) => edge !== i);
     adjaList = createAdjacencyList(vertex, newEdges);
     [first] = adjaList.keys();
     if (bfs(adjaList, first).size !== vertex.length) criticalEdges.push(i);
