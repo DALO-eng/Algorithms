@@ -119,3 +119,20 @@ let data = [
   [7, 3],
 ];
 console.log(kMeans(data, 3, getRandomPoints));
+
+// * EVALUATE
+
+const evaluateKMeans = (k, variance) => {
+  let vx = [1, 3, 5],
+    vy = [1, 3, 5],
+    points = [];
+  for (let i = 0; i < 15; i++) {
+    for (let j = 0; j < 3; j++) {
+      points.push([
+        vx + variance * Math.random(),
+        vy + variance * Math.random(),
+      ]);
+    }
+  }
+  return kMeans(points, k, getRandomPoints);
+};
