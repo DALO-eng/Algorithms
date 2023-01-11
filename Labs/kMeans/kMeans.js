@@ -1,15 +1,3 @@
-const getRandomPointsFromData = (data, k) => {
-  const numSamples = data.length,
-    randomPoints = [];
-  while (randomPoints.length < k) {
-    const random = Math.floor(Math.random() * numSamples);
-    if (!randomPoints.includes(data[random])) {
-      randomPoints.push(data[random]);
-    }
-  }
-  return randomPoints;
-};
-
 const getRandomPoints = (data, k) => {
   const dataX = data.map((point) => point[0]),
     dataY = data.map((point) => point[1]),
@@ -33,18 +21,42 @@ const divideBlocks = (data, k) => {
     maxX = Math.max(...dataX),
     minY = Math.min(...dataY),
     maxY = Math.max(...dataY),
-    blockWidth = (maxX - minX) / k,
-    blockHeight = (maxY - minY) / k,
-    blocks = [];
-  for (let i = 0; i < k; i++) {
-    for (let j = 0; j < k; j++) {
+    totalBlocks = Math.ceil(k / 4) * 4,
+    numColumns = 4,
+    numRows = totalBlocks / numColumns,
+    width = (maxX - minX) / numColumns,
+    height = (maxY - minY) / numRows,
+    blocks = [],
+    randomPoints = [];
+  for (let i = 0; i < numRows; i++) {
+    for (let j = 0; j < numColumns; j++) {
       blocks.push([
-        [minX + i * blockWidth, minY + j * blockHeight],
-        [minX + (i + 1) * blockWidth, minY + (j + 1) * blockHeight],
+        [minX + j * width, minY + i * height],
+        [minX + (j + 1) * width, minY + (i + 1) * height],
       ]);
     }
   }
-  return blocks;
+  for (let i of blocks) {
+    if (randomPoints.length === k) {
+      break;
+    }
+    const randomX = Math.random() * (i[1][0] - i[0][0]) + i[0][0],
+      randomY = Math.random() * (i[1][1] - i[0][1]) + i[0][1];
+    randomPoints.push([randomX, randomY]);
+  }
+  return randomPoints;
+};
+
+const getRandomPointsFromData = (data, k) => {
+  const numSamples = data.length,
+    randomPoints = [];
+  while (randomPoints.length < k) {
+    const random = Math.floor(Math.random() * numSamples);
+    if (!randomPoints.includes(data[random])) {
+      randomPoints.push(data[random]);
+    }
+  }
+  return randomPoints;
 };
 
 const assignPoints = (data, centroids, k) => {
@@ -87,9 +99,10 @@ const setNewCentroids = (data, pointsAssigned, k) => {
   return centroids;
 };
 
-const kMeans = (data, k) => {
+// * CALLBACK IS THE FUNCTION YOU WANNA USE FOR INITIALIZE
+const kMeans = (data, k, callBack) => {
   let oldCentroids = [],
-    centroids = getRandomPoints(data, k),
+    centroids = callBack(data, k),
     pointsAssigned;
   while (JSON.stringify(centroids) !== JSON.stringify(oldCentroids)) {
     pointsAssigned = assignPoints(data, centroids, k);
@@ -105,4 +118,4 @@ let data = [
   [2, 5],
   [7, 3],
 ];
-console.log(kMeans(data, 3));
+console.log(kMeans(data, 3, getRandomPoints));
