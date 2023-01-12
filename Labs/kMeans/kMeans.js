@@ -126,14 +126,11 @@ const getOddNumbers = (n) => {
   return oddNumbers;
 };
 
-const evaluateKMeans = (k, variance) => {
+const evaluateRandomPoints = (k, variance) => {
   let vx = getOddNumbers(k),
     vy = getOddNumbers(k),
     points = [],
-    originalClusters = [],
-    test = [],
-    correct = 0,
-    equivalent = {};
+    originalClusters = [];
   for (let i = 0; i < 15; i++) {
     for (let j = 0; j < k; j++) {
       points.push([
@@ -143,27 +140,51 @@ const evaluateKMeans = (k, variance) => {
       originalClusters.push(j);
     }
   }
-  test = kMeans(points, k, getRandomPoints);
-  correct = 0;
+  return [points, originalClusters];
+};
+
+const evaluate = (k, variance, callBack) => {
+  let [points, original] = evaluateRandomPoints(k, variance),
+    test = kMeans(points, k, callBack),
+    correct = 0,
+    equivalent = {};
   for (let i = 0; i < test.length; i++) {
     if (equivalent[test[i]] === undefined) {
-      equivalent[test[i]] = originalClusters[i];
+      equivalent[test[i]] = original[i];
     }
-    if (equivalent[test[i]] === originalClusters[i]) {
+    if (equivalent[test[i]] === original[i]) {
       correct++;
     }
   }
   return correct / test.length;
 };
+
 // * PART 1
 let accuracy3 = 0,
   accuracy4 = 0,
   accuracy5 = 0;
 for (let i = 0; i < 100; i++) {
-  accuracy3 += evaluateKMeans(3, 1);
-  accuracy4 += evaluateKMeans(4, 1);
-  accuracy5 += evaluateKMeans(5, 1);
+  accuracy3 += evaluate(3, 1, getRandomPoints);
+  accuracy4 += evaluate(4, 1, getRandomPoints);
+  accuracy5 += evaluate(5, 1, getRandomPoints);
 }
-console.log(accuracy3 / 100);
-console.log(accuracy4 / 100);
-console.log(accuracy5 / 100);
+console.log(`3 Centroids: ${accuracy3 / 100}`);
+console.log(`4 Centroids: ${accuracy4 / 100}`);
+console.log(`5 Centroids: ${accuracy5 / 100}`);
+
+// * PART 2
+let variances = [0.1, 0.5, 1, 1.5, 2, 2.5];
+for (let variance of variances) {
+  let accuracyRP = 0,
+    accuracyDB = 0,
+    accuracyRPD = 0;
+  for (let i = 0; i < 100; i++) {
+    accuracyRP += evaluate(3, variance, getRandomPoints);
+    accuracyDB += evaluate(3, variance, divideBlocks);
+    accuracyRPD += evaluate(3, variance, getRandomPointsFromData);
+  }
+  console.log(`Variance: ${variance}`);
+  console.log(`RandomPoints: ${accuracyRP / 100}`);
+  console.log(`Divide Blocks: ${accuracyDB / 100}`);
+  console.log(`getRandomPointsFromData: ${accuracyRPD / 100}`);
+}
