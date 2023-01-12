@@ -112,26 +112,58 @@ const kMeans = (data, k, callBack) => {
   return pointsAssigned;
 };
 
-let data = [
-  [1, 2],
-  [1, 3],
-  [2, 5],
-  [7, 3],
-];
-
 // * EVALUATE
 
+const getOddNumbers = (n) => {
+  let oddNumbers = [];
+  let count = 0;
+  while (oddNumbers.length < n) {
+    if (count % 2 !== 0) {
+      oddNumbers.push(count);
+    }
+    count++;
+  }
+  return oddNumbers;
+};
+
 const evaluateKMeans = (k, variance) => {
-  let vx = [1, 3, 5],
-    vy = [1, 3, 5],
-    points = [];
+  let vx = getOddNumbers(k),
+    vy = getOddNumbers(k),
+    points = [],
+    originalClusters = [],
+    test = [],
+    correct = 0,
+    equivalent = {};
   for (let i = 0; i < 15; i++) {
-    for (let j = 0; j < 3; j++) {
+    for (let j = 0; j < k; j++) {
       points.push([
         vx[j] + variance * Math.random(),
         vy[j] + variance * Math.random(),
       ]);
+      originalClusters.push(j);
     }
   }
-  return kMeans(points, k, getRandomPoints);
+  test = kMeans(points, k, getRandomPoints);
+  correct = 0;
+  for (let i = 0; i < test.length; i++) {
+    if (equivalent[test[i]] === undefined) {
+      equivalent[test[i]] = originalClusters[i];
+    }
+    if (equivalent[test[i]] === originalClusters[i]) {
+      correct++;
+    }
+  }
+  return correct / test.length;
 };
+// * PART 1
+let accuracy3 = 0,
+  accuracy4 = 0,
+  accuracy5 = 0;
+for (let i = 0; i < 100; i++) {
+  accuracy3 += evaluateKMeans(3, 1);
+  accuracy4 += evaluateKMeans(4, 1);
+  accuracy5 += evaluateKMeans(5, 1);
+}
+console.log(accuracy3 / 100);
+console.log(accuracy4 / 100);
+console.log(accuracy5 / 100);
