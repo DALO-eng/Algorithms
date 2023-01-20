@@ -7,7 +7,7 @@ function gradientFunction(x1, x2) {
 }
 
 function stopCriteria(gradient) {
-  return Math.sqrt(gradient[0] ** 2 + gradient[1] ** 2) < 0.000001;
+  return Math.sqrt(gradient[0] ** 2 + gradient[1] ** 2) < 0.0001;
 }
 
 function steepestDescent(fixedStep, x0) {
@@ -21,6 +21,7 @@ function steepestDescent(fixedStep, x0) {
     gradient = gradientFunction(x1, x2);
     console.log(x1, x2, mainFunction(x1, x2));
     if (stopCriteria(gradient)) {
+      console.log(i);
       return [x1, x2];
     }
   }
@@ -29,4 +30,4 @@ function steepestDescent(fixedStep, x0) {
 
 console.log("Steepest descent");
 console.log(steepestDescent(0.0019, [1.2, 1.2]));
-console.log(steepestDescent(0.003, [-1.2, 1]));
+//console.log(steepestDescent(0.003, [-1.2, 1]));
