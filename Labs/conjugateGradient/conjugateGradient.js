@@ -56,6 +56,32 @@ function multiplyVectorEscalar(a, v) {
   return result;
 }
 
+function multiplyMatrix(matrixA, matrixB) {
+  var result = new Array(matrixA.length)
+    .fill(0)
+    .map(() => new Array(matrixB[0].length).fill(0));
+
+  for (var i = 0; i < matrixA.length; i++) {
+    for (var j = 0; j < matrixB[0].length; j++) {
+      for (var k = 0; k < matrixB.length; k++) {
+        result[i][j] += matrixA[i][k] * matrixB[k][j];
+      }
+    }
+  }
+  return result;
+}
+
+function transpose(matrix) {
+  let transposedMatrix = [];
+  for (var i = 0; i < matrix[0].length; i++) {
+    transposedMatrix[i] = [];
+    for (var j = 0; j < matrix.length; j++) {
+      transposedMatrix[i][j] = matrix[j][i];
+    }
+  }
+  return transposedMatrix;
+}
+
 function linearConjugateGradient(n) {
   let A = getHilbertMatrix(n),
     b = [],
